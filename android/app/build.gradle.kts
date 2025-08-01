@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "letienit.tiny_util.all_in_one_tool"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

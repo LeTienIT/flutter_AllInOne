@@ -1,0 +1,108 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'app_feature.dart';
+
+final featureListProvider = StateProvider<List<AppFeature>>((ref) {
+  return [
+    AppFeature(
+      type: AppFeatureType.currency,
+      title: 'Tiền tệ',
+      iconPath: 'assets/currency.png',
+      route: '/currency',
+      order: 1,
+      color: Colors.indigo,
+      descr: 'Quy đổi tỉ giá',
+    ),
+    AppFeature(
+      type: AppFeatureType.unit,
+      title: 'Đơn vị',
+      iconPath: 'assets/unit.png',
+      route: '/unit',
+      order: 2,
+      color: Colors.deepPurple,
+      descr: 'Chuyển đổi các đơn vị toán học',
+    ),
+    AppFeature(
+      type: AppFeatureType.time,
+      title: 'Đếm thời gian',
+      iconPath: 'assets/time.png',
+      route: '/time',
+      order: 3,
+      color: Colors.teal,
+      descr: 'Đếm giây',
+    ),
+    AppFeature(
+      type: AppFeatureType.calendar,
+      title: 'Lịch & đếm ngày',
+      iconPath: 'assets/calendar.png',
+      route: '/calendar',
+      order: 4,
+      color: Colors.orange,
+      descr: 'Lịch âm - dương, tính ngày',
+    ),
+    AppFeature(
+      type: AppFeatureType.calculator,
+      title: 'Máy tính',
+      iconPath: 'assets/calculator.png',
+      route: '/calculator',
+      order: 5,
+      color: Colors.blueGrey,
+      descr: 'Tính toán thông thường và nâng cao',
+    ),
+    AppFeature(
+      type: AppFeatureType.security,
+      title: 'Mật khẩu mạnh',
+      iconPath: 'assets/security.png',
+      route: '/security',
+      order: 6,
+      color: Colors.redAccent,
+      descr: 'Tạo - lưu các chuỗi mật khẩu mạnh',
+    ),
+    AppFeature(
+      type: AppFeatureType.resizeImage,
+      title: 'Resize ảnh',
+      iconPath: 'assets/resize.png',
+      route: '/resize',
+      order: 7,
+      color: Colors.green,
+      descr: 'Thay đổi kích thước ảnh',
+    ),
+    AppFeature(
+      type: AppFeatureType.randomizer,
+      title: 'Randomizer',
+      iconPath: 'assets/randomizer.png',
+      route: '/randomizer',
+      order: 8,
+      color: Colors.amber,
+      descr: 'Chọn ngẫu nhiên',
+    ),
+    AppFeature(
+      type: AppFeatureType.breathing,
+      title: 'Tập thở',
+      iconPath: 'assets/breathing.png',
+      route: '/breathing',
+      order: 9,
+      color: Colors.cyan,
+      descr: 'Hít thở theo nhịp',
+    ),
+    AppFeature(
+      type: AppFeatureType.encryption,
+      title: 'Mã hoá / Giải mã',
+      iconPath: 'assets/encryption.png',
+      route: '/encryption',
+      order: 10,
+      color: Colors.deepOrange,
+      descr: 'Mã hóa và giải mã 1 ND',
+    ),
+    AppFeature(
+      type: AppFeatureType.qrScanner,
+      title: 'Quét mã QR',
+      iconPath: 'assets/qrScanner.png',
+      route: '/qr',
+      order: 11,
+      color: Colors.purple,
+      descr: 'Quét QR, Mã vạch ...',
+    ),
+  ]..sort((a, b) => a.order.compareTo(b.order));
+});
+
