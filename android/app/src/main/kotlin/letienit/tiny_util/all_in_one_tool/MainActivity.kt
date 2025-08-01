@@ -1,0 +1,5 @@
+package letienit.tiny_util.all_in_one_tool
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
