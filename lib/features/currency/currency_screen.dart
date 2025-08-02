@@ -1,42 +1,61 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'controller/conversion.dart';
 import 'controller/currency_symbols.dart';
-import 'controller/vnd_rates.dart';
-import 'model/currency_model.dart';
 
-class CurrencyScreen extends ConsumerStatefulWidget{
+class CurrencyScreen extends ConsumerStatefulWidget {
   const CurrencyScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return _CurrencyScreen();
-  }
-
+  ConsumerState<CurrencyScreen> createState() => _CurrencyScreen();
 }
 
-class _CurrencyScreen extends ConsumerState<CurrencyScreen>{
+class _CurrencyScreen extends ConsumerState<CurrencyScreen> {
   String fromCurrency = 'USD';
-  String toCurrency = 'VND';
-  double amount = 1;
+  String toCurrency = 'EUR';
+  final TextEditingController input = TextEditingController();
+  final TextEditingController output = TextEditingController(text: 'Chuyển đổi ...');
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    input.dispose();
+    output.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final symbolState = ref.watch(currencySymbolsProvider);
-    final resultState = ref.watch(conversionProvider(ConversionParams(
-      from: fromCurrency,
-      to: toCurrency,
-      amount: amount,
-    )));
-    final rateState = ref.watch(vndRatesProvider);
+    final convertState = ref.watch(currencyConvertProvider);
+    ref.listen<AsyncValue<double>>(
+      currencyConvertProvider,
+          (previous, next) {
+        next.when(
+          data: (value) {
+            output.text = value.toStringAsFixed(2);
+          },
+          loading: () {
+            output.text = "Đang chuyển đổi...";
+          },
+          error: (err, _) {
+            output.text = "Lỗi chuyển đổi: $err";
+          },
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text('Chuyển đổi tỷ giá'),),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             symbolState.when(
               loading: () => const CircularProgressIndicator(),
@@ -45,21 +64,27 @@ class _CurrencyScreen extends ConsumerState<CurrencyScreen>{
                 return Row(
                   children: [
                     Expanded(
-                      child: DropdownButton<String>(
-                        value: fromCurrency,
-                        isExpanded: true,
-                        items: symbols
-                            .map((e) => DropdownMenuItem(
-                          value: e.code,
-                          child: Text(e.code),
-                        ))
-                            .toList(),
+                      child: DropdownSearch<String>(
+                        selectedItem: fromCurrency,
+                        items: symbols.map((e) => e.code).toList(),
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Từ tiền tệ",
+                            hintText: "Chọn loại tiền...",
+                          ),
+                        ),
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true,
+                          searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(
+                              hintText: "Tìm kiếm mã tiền...",
+                            ),
+                          ),
+                        ),
                         onChanged: (val) {
                           if (val != null) {
                             setState(() {
-                              print("before: $fromCurrency");
                               fromCurrency = val;
-                              print("late: $fromCurrency");
                             });
                           }
                         },
@@ -67,17 +92,27 @@ class _CurrencyScreen extends ConsumerState<CurrencyScreen>{
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: DropdownButton<String>(
-                        value: toCurrency,
-                        isExpanded: true,
-                        items: symbols
-                            .map((e) => DropdownMenuItem(
-                          value: e.code,
-                          child: Text(e.code),
-                        ))
-                            .toList(),
+                      child: DropdownSearch<String>(
+                        selectedItem: toCurrency,
+                        items: symbols.map((e) => e.code).toList(),
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Sang tiền tệ",
+                            hintText: "Chọn loại tiền...",
+                          ),
+                        ),
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true,
+                          searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(
+                              hintText: "Tìm kiếm mã tiền...",
+                            ),
+                          ),
+                        ),
                         onChanged: (val) {
-                          if (val != null) setState(() => toCurrency = val);
+                          if (val != null) {
+                            setState(() => toCurrency = val);
+                          }
                         },
                       ),
                     ),
@@ -87,61 +122,71 @@ class _CurrencyScreen extends ConsumerState<CurrencyScreen>{
             ),
             const SizedBox(height: 12),
             TextField(
+              controller: input,
               decoration: const InputDecoration(labelText: 'Nhập số tiền'),
               keyboardType: TextInputType.number,
-              onChanged: (val) {
-                final numVal = double.tryParse(val);
-                if (numVal != null) {
-                  setState(() {
-                    print(amount);
-                    amount = numVal;
-                    print(amount);
-                  });
-                }
-              },
             ),
             const SizedBox(height: 12),
-            resultState.when(
-              loading: () => Text('Đang chuyển đổi...'),
-              error: (e, _) => Text('Lỗi chuyển đổi: $e'),
-              data: (result) => Text(
-                '$amount $fromCurrency = ${result.toStringAsFixed(2)} $toCurrency',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+            TextField(
+              controller: output,
+              decoration: const InputDecoration(labelText: 'Kết quả'),
+              keyboardType: TextInputType.number,
+              readOnly: true,
             ),
             ElevatedButton(
-                onPressed: (){
-
+                onPressed: convertState.isLoading ? null : () {
+                  final inputAmount = input.text;
+                  if(inputAmount.isEmpty){
+                    output.text = 'Không hợp lệ';
+                    return;
+                  }
+                  ref.read(currencyConvertProvider.notifier).convert(
+                    amount: double.parse(inputAmount),
+                    fromCurrency: fromCurrency,
+                    toCurrency: toCurrency,
+                  );
                 },
-                child: Text('Chuyển đổi')
+              child: convertState.isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Chuyển đổi'),
             ),
             SizedBox(height: 16,),
             Divider(height: 1,),
-            rateState.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Text('Lỗi khi tải tỷ giá: $e'),
-              data: (rates) {
-                final sortedRates = rates.entries.toList()
-                  ..sort((a, b) => a.key.compareTo(b.key));
-
-                return Wrap(
-                  spacing: 2,
-                  runSpacing: 2,
-                  children: sortedRates.map((entry) {
-                    final code = entry.key;
-                    final rate = entry.value;
-                    if (rate == 0) return const SizedBox.shrink();
-
-                    return Chip(
-                      label: Text(
-                        '1 $code = ${(1 / rate).toStringAsFixed(0)} VND',
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                      backgroundColor: Colors.blue.shade50,
-                    );
-                  }).toList(),
+            SizedBox(height: 8,),
+            Text('Danh sách loại tiền hỗ trợ',style: Theme.of(context).textTheme.titleMedium,),
+            symbolState.when(
+              loading: () => const CircularProgressIndicator(),
+              error: (e, _) => throw Exception('Lỗi: $e'),
+              data: (symbols) {
+                return Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Wrap(
+                    spacing: 3,
+                    children: [
+                      ...symbols.map((e){
+                        return Chip(
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                e.code,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                e.name,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                        );
+                      })
+                    ],
+                  ),
                 );
-              },
+              }
             )
           ],
         ),

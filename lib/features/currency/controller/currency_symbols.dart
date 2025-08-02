@@ -10,13 +10,14 @@ final currencySymbolsProvider = AsyncNotifierProvider<CurrencySymbolsNotifier, L
 class CurrencySymbolsNotifier extends AsyncNotifier<List<CurrencySymbol>> {
   @override
   Future<List<CurrencySymbol>> build() async {
-    // final dio = ref.read(dioProvider);
-    // final res = await dio.get('/codes'); // endpoint để lấy danh sách mã
-    // final data = res.data['supported_codes'] as List;
-    //
-    // return data.map((e) {
-    //   return CurrencySymbol(code: e[0], name: e[1]); // [code, name]
-    // }).toList();
-    return [];
+    final dio = ref.read(dioProvider);
+    final res = await dio.get('currencies');
+
+    final data = res.data as Map<String, dynamic>;
+
+    return data.entries.map((entry) {
+      return CurrencySymbol(code: entry.key, name: entry.value as String);
+    }).toList();
   }
+
 }

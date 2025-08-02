@@ -1,3 +1,4 @@
+import 'package:all_in_one_tool/core/app_router.dart';
 import 'package:all_in_one_tool/core/theme/dark_theme.dart';
 import 'package:all_in_one_tool/core/theme/light_theme.dart';
 import 'package:all_in_one_tool/features/currency/currency_screen.dart';
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       theme: lightTheme,
       themeMode: ThemeMode.light,
-      home: CurrencyScreen(),
+      onGenerateRoute: AppRouter.onGenerateRouter,
+      home: const HomeScreen(),
     );
   }
 }
