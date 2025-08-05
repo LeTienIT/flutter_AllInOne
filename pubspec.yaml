@@ -2,7 +2,7 @@ name: all_in_one_tool
 description: "Tất cả các tiện ích cá nhân sử dụng hằng ngày - AllinOne Tools"
 publish_to: 'none'
 
-version: 2.1.1+1
+version: 3.1.1+2
 
 environment:
   sdk: ^3.7.2
@@ -42,7 +42,6 @@ dependencies:
   lottie: ^3.3.1
 
   dropdown_search: ^5.0.6
-  units_converter: ^2.0.2
 
 dev_dependencies:
   flutter_test:

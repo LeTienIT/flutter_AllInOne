@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:units_converter/units_converter.dart' as uc;
-import 'controller/converter.dart';
-import 'controller/unit_list.dart';
-import 'model/unit_model.dart';
+import 'package:intl/intl.dart';
+import '../../core/unit_library/unit_definition.dart';
+import '../../core/unit_library/unit_library_main.dart';
 
 class UnitScreen extends ConsumerStatefulWidget{
   const UnitScreen({super.key});
@@ -14,11 +13,14 @@ class UnitScreen extends ConsumerStatefulWidget{
 }
 
 class _UnitScreen extends ConsumerState<UnitScreen>{
-  UnitGroup selectedGroup = UnitGroup.length;
-  dynamic fromUnit;
-  dynamic toUnit;
   final input = TextEditingController(text: "1");
   final output = TextEditingController(text: "Kết quả");
+
+  UnitCategory? _loaiDangChon;
+  List<UnitDefinition> _dsDonVi = [];
+
+  UnitDefinition? _donViTu;
+  UnitDefinition? _donViDen;
 
   @override
   void initState() {
@@ -34,83 +36,72 @@ class _UnitScreen extends ConsumerState<UnitScreen>{
 
   @override
   Widget build(BuildContext context) {
-    final unitsMap = ref.watch(supportedUnitsProvider);
-    final unitList = unitsMap[selectedGroup] ?? [];
-
-    fromUnit ??= unitList.first;
-    toUnit ??= unitList.length > 1 ? unitList[1] : unitList.first;
-
-    ref.listen<AsyncValue<double>>(
-      unitConvertProvider,
-          (previous, next) {
-        next.when(
-          data: (val) => output.text = val.toStringAsFixed(4),
-          loading: () => output.text = 'Đang chuyển đổi...',
-          error: (e, _) => output.text = 'Lỗi: $e',
-        );
-      },
-    );
-
     return Scaffold(
       appBar: AppBar(title: const Text('Chuyển đổi đơn vị')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            DropdownButton<UnitGroup>(
-              value: selectedGroup,
-              isExpanded: true,
-              items: UnitGroup.values
-                  .map((e) => DropdownMenuItem(
-                value: e,
-                child: Text(unitGroupNames[e]!),
-              ))
-                  .toList(),
-              onChanged: (val) {
-                if (val != null) {
-                  setState(() {
-                    selectedGroup = val;
-                    final list = unitsMap[val]!;
-                    fromUnit = list.first;
-                    toUnit = list.length > 1 ? list[1] : list.first;
-                  });
-                }
+            DropdownButtonFormField<UnitCategory>(
+              value: _loaiDangChon,
+              decoration: InputDecoration(
+                labelText: 'Chọn loại đơn vị',
+                border: OutlineInputBorder(), // Viền đẹp
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              ),
+              items: UnitCategory.values.map((loai) {
+                return DropdownMenuItem(
+                  value: loai,
+                  child: Text(UnitLibrary.tenLoai(loai)), // Dùng tên tiếng Việt
+                );
+              }).toList(),
+              onChanged: (loaiMoi) {
+                setState(() {
+                  _loaiDangChon = loaiMoi;
+                  _dsDonVi = UnitLibrary.getUnitsByCategory(loaiMoi!);
+                  _donViTu = null;
+                  _donViDen = null;
+                });
               },
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
-            // Từ và đến
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButton<dynamic>(
-                    value: fromUnit,
-                    isExpanded: true,
-                    items: unitList
-                        .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(formatUnitName(e)),
-                    ))
-                        .toList(),
-                    onChanged: (val) => setState(() => fromUnit = val),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: DropdownButton<dynamic>(
-                    value: toUnit,
-                    isExpanded: true,
-                    items: unitList
-                        .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(formatUnitName(e)),
-                    ))
-                        .toList(),
-                    onChanged: (val) => setState(() => toUnit = val),
-                  ),
-                ),
-              ],
+            DropdownButtonFormField<UnitDefinition>(
+              value: _donViTu,
+              decoration: InputDecoration(
+                labelText: 'Từ đơn vị',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              ),
+              items: _dsDonVi.map((donvi) {
+                return DropdownMenuItem(
+                  value: donvi,
+                  child: Text('${donvi.ten} (${donvi.kyHieu})'),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _donViTu = value);
+              },
             ),
+            SizedBox(height: 12),
+            DropdownButtonFormField<UnitDefinition>(
+              value: _donViDen,
+              decoration: InputDecoration(
+                labelText: 'Sang đơn vị',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              ),
+              items: _dsDonVi.map((donvi) {
+                return DropdownMenuItem(
+                  value: donvi,
+                  child: Text('${donvi.ten} (${donvi.kyHieu})'),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _donViDen = value);
+              },
+            ),
+
             const SizedBox(height: 12),
 
             // Nhập giá trị
@@ -120,13 +111,13 @@ class _UnitScreen extends ConsumerState<UnitScreen>{
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
-
             // Kết quả
             TextField(
               controller: output,
               decoration: const InputDecoration(labelText: 'Kết quả'),
               readOnly: true,
             ),
+
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () async {
@@ -135,17 +126,41 @@ class _UnitScreen extends ConsumerState<UnitScreen>{
                   output.text = 'Không hợp lệ';
                   return;
                 }
-                await ref.read(unitConvertProvider.notifier).convert(
-                  group: selectedGroup,
-                  fromUnit: fromUnit,
-                  toUnit: toUnit,
-                  value: value,
-                );
+                if (_donViTu == null || _donViDen == null) {
+                  setState(() {
+                    output.text = 'Chưa chọn đơn vị';
+                  });
+                  return;
+                }
+
+                try {
+                  final result = UnitLibrary.convert(value, _donViTu!.unitId, _donViDen!.unitId);
+                  setState(() {
+                    final hienThi = '${UnitLibrary.formatSoDonVi(result)} ${_donViDen!.kyHieu}';
+                    output.text = hienThi;
+                  });
+                } catch (e) {
+                  setState(() {
+                    output.text = 'Lỗi: ${e.toString()}';
+                  });
+                }
               },
               child: const Text('Chuyển đổi'),
             ),
+
             const SizedBox(height: 24),
             const Divider(),
+            if (_donViTu?.moTa != null)...[
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  _donViTu!.moTa!,
+                  style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey[600]),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Divider(),
+            ],
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -156,8 +171,8 @@ class _UnitScreen extends ConsumerState<UnitScreen>{
             Wrap(
               spacing: 8,
               runSpacing: 4,
-              children: unitList.map((e) => Chip(
-                label: Text(formatUnitName(e)),
+              children: _dsDonVi.map((e) => Chip(
+                label: Text('${e.ten} (${e.kyHieu})'),
               ))
                   .toList(),
             ),
@@ -165,9 +180,5 @@ class _UnitScreen extends ConsumerState<UnitScreen>{
         ),
       ),
     );
-  }
-  String formatUnitName(dynamic unit) {
-    final raw = unit.toString().split('.').last;
-    return raw[0].toUpperCase() + raw.substring(1).replaceAll('_', ' ');
   }
 }
