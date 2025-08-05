@@ -167,7 +167,7 @@ class _TimeScreen extends ConsumerState<TimeScreen>{
 
                   return ListTile(
                     leading: Text('#${index + 1}'),
-                    title: Text('Paused at $text'),
+                    title: Text('Dừng: $text'),
                   );
                 },
               ),

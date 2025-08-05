@@ -1,3 +1,4 @@
+import 'package:all_in_one_tool/features/calendar/calendar_screen.dart';
 import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
@@ -10,6 +11,7 @@ class AppRouter{
   static const currency = '/currency';
   static const unit = '/unit';
   static const time = '/time';
+  static const calendar = '/calendar';
 
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
@@ -21,6 +23,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const UnitScreen());
       case time:
         return MaterialPageRoute(builder: (_) => const TimeScreen());
+      case calendar:
+        return MaterialPageRoute(builder: (_) => const CalendarScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
