@@ -1,3 +1,5 @@
+import 'package:all_in_one_tool/features/calculator/calculator_screen.dart';
+import 'package:all_in_one_tool/features/calculator/expression_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_more_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_screen.dart';
 import 'package:all_in_one_tool/features/time/time_screen.dart';
@@ -14,7 +16,8 @@ class AppRouter{
   static const time = '/time';
   static const calendar = '/calendar';
   static const calendarMore = '/calendar-more';
-
+  static const calculator = '/calculator';
+  static const calculatorExp = '/calculator-expression';
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
       case home:
@@ -29,9 +32,14 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const CalendarScreen());
       case calendarMore:
         return MaterialPageRoute(builder: (_) => const CalendarMoreScreen());
+      case calculator:
+        return MaterialPageRoute(builder: (_) => const CalculatorScreen());
+      case calculatorExp:
+        return MaterialPageRoute(builder: (_) => const ExpressionCalculatorScreen());
       default:
         return MaterialPageRoute(
-          builder: (_) => const Scaffold(
+          builder: (_) => Scaffold(
+            appBar: AppBar(title: Text('Lỗi',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),centerTitle: true,),
             body: Center(child: Text('Không tìm thấy trang')),
           ),
         );
