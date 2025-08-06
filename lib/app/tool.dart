@@ -45,4 +45,4 @@ List<GioDep> convertLuckyHours(List<bool> hours) {
   return result;
 }
 
-String _formatHour(int h) => h.toString().padLeft(2, '0') + ':00';
+String _formatHour(int h) => '${h.toString().padLeft(2, '0')}:00';

@@ -22,14 +22,13 @@ class _CalenderScreen extends ConsumerState<CalendarScreen>{
   late DateTime? lunarDatetime;
   late bool luckyDay;
   List<bool> luckyHours = [];
+
+  double _fabOpacity = 0.6;
+
+  bool _initialized = false;
   @override
   void initState() {
     super.initState();
-    final lunarDate = LunarDateTime(year: now.year, month: now.month, day: now.day);
-    final solarDate = FullCalenderExtension.convertLunarDateToSolarDate(lunarDate);
-    lunarDatetime = solarDate;
-    luckyDay = FullCalender(date:now, timeZone: 7,).lunarDate.isLuckyDay;
-    luckyHours = FullCalender(date: now, timeZone: 7).lunarDate.listLuckyHours;
   }
 
   @override
@@ -39,6 +38,17 @@ class _CalenderScreen extends ConsumerState<CalendarScreen>{
 
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) {
+      _initialized = true;
+      final lunar = FullCalender(date: now, timeZone: 7).lunarDate;
+      setState(() {
+        now = now;
+        lunarDatetime = DateTime(lunar.year, lunar.month, lunar.day);
+        luckyDay = lunar.isLuckyDay;
+        luckyHours = lunar.listLuckyHours;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('Lịch'),),
       body: SingleChildScrollView(
@@ -103,6 +113,20 @@ class _CalenderScreen extends ConsumerState<CalendarScreen>{
               ),
             ),
           ],
+        ),
+      ),
+      floatingActionButton: Listener(
+        onPointerDown: (_) => setState(() => _fabOpacity = 1.0),
+        onPointerUp: (_) => setState(() => _fabOpacity = 0.6),
+        child: AnimatedOpacity(
+          opacity: _fabOpacity,
+          duration: Duration(milliseconds: 200),
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(context, '/calendar-more');
+            },
+          ),
         ),
       ),
     );

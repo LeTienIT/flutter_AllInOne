@@ -1,3 +1,4 @@
+import 'package:all_in_one_tool/features/calendar/calendar_more_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_screen.dart';
 import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
@@ -12,6 +13,7 @@ class AppRouter{
   static const unit = '/unit';
   static const time = '/time';
   static const calendar = '/calendar';
+  static const calendarMore = '/calendar-more';
 
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
@@ -25,6 +27,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const TimeScreen());
       case calendar:
         return MaterialPageRoute(builder: (_) => const CalendarScreen());
+      case calendarMore:
+        return MaterialPageRoute(builder: (_) => const CalendarMoreScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
