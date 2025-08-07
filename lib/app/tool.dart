@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 String formatVietnameseDate(DateTime date) {
   const weekdays = {
     1: 'Thứ Hai',
@@ -46,3 +48,24 @@ List<GioDep> convertLuckyHours(List<bool> hours) {
 }
 
 String _formatHour(int h) => '${h.toString().padLeft(2, '0')}:00';
+
+double? parseInput(String input) {
+  final value = double.tryParse(input.trim());
+  return value;
+}
+
+void showError(BuildContext context, String errTitle, String message) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text(errTitle),
+      content: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Đóng'),
+        ),
+      ],
+    ),
+  );
+}

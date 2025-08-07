@@ -75,29 +75,6 @@ class _CalculatorScreenState extends ConsumerState<CalculatorScreen> {
           ),
         ],
       ),
-      floatingActionButton: SpeedDial(
-        icon: Icons.add_box_outlined,
-        activeIcon: Icons.close,
-        children: [
-          // Sang giao diện nhập biểu thức
-          SpeedDialChild(
-            child: Icon(Icons.keyboard_alt_outlined),
-            label: 'Nhập biểu thức',
-            onTap: () {
-              Navigator.pushNamed(context, '/calculator-expression');
-            },
-          ),
-
-          // Sang giao diện nâng cao hơn - tính sau
-          SpeedDialChild(
-            child: Icon(Icons.auto_graph_outlined),
-            label: 'Nâng cao',
-            onTap: () {
-
-            },
-          ),
-        ],
-      ),
     );
   }
 }

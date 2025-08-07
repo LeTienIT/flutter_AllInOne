@@ -1,4 +1,5 @@
 import 'package:all_in_one_tool/features/calculator/widget/history_item.dart';
+import 'package:all_in_one_tool/features/calculator/widget/operator_item.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -56,6 +57,15 @@ class _ExpressionCalculatorScreenState extends State<ExpressionCalculatorScreen>
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 300), () {
+      if (mounted) {
+        _focusNode.requestFocus();
+      }
+    });
+  }
+  @override
   void dispose() {
     super.dispose();
     _focusNode.dispose();
@@ -82,6 +92,7 @@ class _ExpressionCalculatorScreenState extends State<ExpressionCalculatorScreen>
               TextField(
                 controller: _controller,
                 focusNode: _focusNode,
+                autofocus: false,
                 maxLines: 2,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -120,9 +131,9 @@ class _ExpressionCalculatorScreenState extends State<ExpressionCalculatorScreen>
                 spacing: 8,
                 runSpacing: 8,
                 children: operators.map((op) {
-                  return ActionChip(
-                    label: Text(op, style: const TextStyle(fontSize: 10)),
-                    onPressed: () => _insertAtCursor(op),
+                  return OperatorItem(
+                    label: op,
+                    onTap: () => _insertAtCursor(op),
                   );
                 }).toList(),
               ),
