@@ -3,6 +3,7 @@ import 'package:all_in_one_tool/features/calculator/expression_screen.dart';
 import 'package:all_in_one_tool/features/calculator/math_graph_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_more_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_screen.dart';
+import 'package:all_in_one_tool/features/image/image_screen.dart';
 import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
@@ -20,6 +21,7 @@ class AppRouter{
   static const calculator = '/calculator';
   static const calculatorExp = '/calculator-expression';
   static const graph = '/graph';
+  static const resize = '/resize';
 
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
@@ -41,6 +43,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const ExpressionCalculatorScreen());
       case graph:
         return MaterialPageRoute(builder: (_) => const GraphScreen());
+      case resize:
+        return MaterialPageRoute(builder: (_) => const ImageScreen());
 
       default:
         return MaterialPageRoute(
