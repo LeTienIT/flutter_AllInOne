@@ -18,20 +18,33 @@ class ImagePickerService {
   }
 
   Future<int> saveImageToGallery(Uint8List imageBytes) async {
-    if (await Permission.storage.request().isGranted || await Permission.photos.request().isGranted) {
+    bool granted = false;
+
+    if (Platform.isAndroid) {
+      if (await Permission.photos.request().isGranted) {
+        granted = true;
+      } else if (await Permission.mediaLibrary.request().isGranted) {
+        granted = true;
+      } else if (await Permission.storage.request().isGranted) {
+        granted = true;
+      }
+    } else if (Platform.isIOS) {
+      if (await Permission.photos.request().isGranted) {
+        granted = true;
+      }
+    }
+
+    if (granted) {
       final result = await ImageGallerySaverPlus.saveImage(
         imageBytes,
         quality: 100,
         name: "edited_image_${DateTime.now().millisecondsSinceEpoch}",
       );
 
-      if (result['isSuccess']) {
-        return 1;
-      } else {
-        return 0;
-      }
+      return result['isSuccess'] ? 1 : 0;
     } else {
       return -1;
     }
   }
+
 }

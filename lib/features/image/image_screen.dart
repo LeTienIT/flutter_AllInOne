@@ -104,8 +104,11 @@ class _ImageScreenState extends State<ImageScreen> {
                         if(rs == 1){
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đã lưu ảnh vào thư viên'), backgroundColor: Colors.green,));
                         }
-                        else{
+                        else if(rs == 0){
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Không lưu được ảnh'), backgroundColor: Colors.redAccent,));
+                        }
+                        else{
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Không có quyền lưu ành'), backgroundColor: Colors.redAccent,));
                         }
                         setState(() {
                           enableBtn = true;
