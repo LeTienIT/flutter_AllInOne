@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 String formatVietnameseDate(DateTime date) {
   const weekdays = {
@@ -68,4 +71,30 @@ void showError(BuildContext context, String errTitle, String message) {
       ],
     ),
   );
+}
+
+Future<void> cleanOnlyCache() async {
+  try {
+    // 1. Xóa thư mục cache tạm thời (temporary directory)
+    final tempDir = await getTemporaryDirectory();
+    if (await tempDir.exists()) {
+      await tempDir.delete(recursive: true);
+      await tempDir.create(); // Tạo lại thư mục rỗng
+    }
+
+    // 2. Xóa cache của các package (image, network...)
+    await DefaultCacheManager().emptyCache(); // cached_network_image
+    // Xóa cache của Dio (nếu dùng)
+    final dioCacheDir = Directory('${tempDir.path}/dio');
+    if (await dioCacheDir.exists()) await dioCacheDir.delete(recursive: true);
+
+    // 3. Xóa cache WebView (nếu app dùng WebView)
+    final appDir = await getApplicationSupportDirectory();
+    final webViewCacheDir = Directory('${appDir.path}/WebKit');
+    if (await webViewCacheDir.exists()) {
+      await webViewCacheDir.delete(recursive: true);
+    }
+  } catch (e) {
+    throw Exception(e);
+  }
 }

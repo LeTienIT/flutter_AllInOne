@@ -13,6 +13,7 @@ enum AppFeatureType {
   breathing, // THỞ NHIPJ ĐIỆU
   encryption, // MÃ HÓA - GIẢI MÃ
   qrScanner, // SCAN - QUÉT ĐỌC
+  deleteCache,
 }
 
 class AppFeature {

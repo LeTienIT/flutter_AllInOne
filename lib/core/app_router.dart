@@ -8,6 +8,7 @@ import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import '../features/cache/cache_screen.dart';
 import '../features/currency/currency_screen.dart';
 import '../features/password/pass_word_screen.dart';
 
@@ -24,6 +25,7 @@ class AppRouter{
   static const image = '/image';
   static const video = '/video';
   static const password = '/password';
+  static const cache = '/delete-cache';
 
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
@@ -49,7 +51,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const ImageScreen());
       case password:
         return MaterialPageRoute(builder: (_) => const StrongPasswordScreen());
-
+      case cache:
+        return MaterialPageRoute(builder: (_) => CacheCleanerScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

@@ -112,6 +112,15 @@ final featureListProvider = StateProvider<List<AppFeature>>((ref) {
       color: Colors.purple,
       descr: 'Quét QR, Mã vạch ...',
     ),
+    AppFeature(
+      type: AppFeatureType.deleteCache,
+      title: 'Xóa cache',
+      iconPath: 'assets/cleaning.png',
+      route: '/delete-cache',
+      order: 13,
+      color: Colors.deepOrangeAccent,
+      descr: 'Giải phóng bộ nhớ',
+    ),
   ]..sort((a, b) => a.order.compareTo(b.order));
 });
 
