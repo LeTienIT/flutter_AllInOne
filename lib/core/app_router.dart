@@ -8,8 +8,8 @@ import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../features/currency/currency_screen.dart';
+import '../features/password/pass_word_screen.dart';
 
 class AppRouter{
   static const String home = '/';
@@ -21,7 +21,9 @@ class AppRouter{
   static const calculator = '/calculator';
   static const calculatorExp = '/calculator-expression';
   static const graph = '/graph';
-  static const resize = '/resize';
+  static const image = '/image';
+  static const video = '/video';
+  static const password = '/password';
 
   static MaterialPageRoute onGenerateRouter(RouteSettings setting){
     switch(setting.name){
@@ -43,8 +45,10 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => const ExpressionCalculatorScreen());
       case graph:
         return MaterialPageRoute(builder: (_) => const GraphScreen());
-      case resize:
+      case image:
         return MaterialPageRoute(builder: (_) => const ImageScreen());
+      case password:
+        return MaterialPageRoute(builder: (_) => const StrongPasswordScreen());
 
       default:
         return MaterialPageRoute(

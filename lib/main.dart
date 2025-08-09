@@ -1,7 +1,6 @@
 import 'package:all_in_one_tool/core/app_router.dart';
 import 'package:all_in_one_tool/core/theme/dark_theme.dart';
 import 'package:all_in_one_tool/core/theme/light_theme.dart';
-import 'package:all_in_one_tool/features/currency/currency_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

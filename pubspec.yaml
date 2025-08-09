@@ -2,7 +2,7 @@ name: all_in_one_tool
 description: "Tất cả các tiện ích cá nhân sử dụng hằng ngày - AllinOne Tools"
 publish_to: 'none'
 
-version: 6.2.2+9
+version: 7.0.0+10
 
 environment:
   sdk: ^3.7.2
@@ -21,11 +21,8 @@ dependencies:
 
   image: ^4.0.17
   image_picker: ^1.0.0
-  video_player: ^2.7.0
-  chewie: ^1.7.4
   image_gallery_saver_plus: ^4.0.1
   pro_image_editor: ^11.1.1
-  pro_video_editor: ^0.2.3
 
   path: ^1.9.0
   path_provider: ^2.0.14
