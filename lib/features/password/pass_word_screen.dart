@@ -175,7 +175,7 @@ class _StrongPasswordScreenState extends State<StrongPasswordScreen> {
                       backgroundColor: !isCreatingPassword ? Colors.blue : Colors.white,
                       foregroundColor: !isCreatingPassword ? Colors.white : Colors.black,
                     ),
-                    child: Text('Đánh giá mật khẩu'),
+                    child: Text('Đánh giá'),
                   ),
                 ),
               ],
