@@ -1,3 +1,4 @@
+import 'package:all_in_one_tool/features/breathing/breathing_screen.dart';
 import 'package:all_in_one_tool/features/calculator/calculator_screen.dart';
 import 'package:all_in_one_tool/features/calculator/expression_screen.dart';
 import 'package:all_in_one_tool/features/calculator/math_graph_screen.dart';
@@ -9,6 +10,7 @@ import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
 import 'package:all_in_one_tool/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import '../features/breathing/breathing_animation.dart';
 import '../features/cache/cache_screen.dart';
 import '../features/currency/currency_screen.dart';
 import '../features/password/pass_word_screen.dart';
@@ -64,6 +66,13 @@ class AppRouter{
       case '/wheel_animation':
         final arg = setting.arguments as List<String>;
         return MaterialPageRoute(builder: (_) => WheelPage(values: arg,));
+      case '/breathing':
+        return MaterialPageRoute(builder: (_) => BreathingScreen());
+      case '/breathing-run':
+        final arg = setting.arguments as int;
+        return MaterialPageRoute(builder: (_) => BreathingRun(mode: arg,));
+
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

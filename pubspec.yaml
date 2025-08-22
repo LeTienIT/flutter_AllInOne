@@ -2,7 +2,7 @@ name: all_in_one_tool
 description: "Tất cả các tiện ích cá nhân sử dụng hằng ngày - AllinOne Tools"
 publish_to: 'none'
 
-version: 8.0.1+12
+version: 9.0.1+13
 
 environment:
   sdk: ^3.7.2
