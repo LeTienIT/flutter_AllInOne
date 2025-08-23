@@ -13,7 +13,7 @@ class _BreathingScreen extends State<BreathingScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hít thở"),),
+      appBar: AppBar(title: Text("Các bài hít thở"),),
       body: SingleChildScrollView(
         child: Column(
           children: [

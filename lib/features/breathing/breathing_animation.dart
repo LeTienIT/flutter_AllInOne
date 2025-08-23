@@ -174,7 +174,7 @@ class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderSt
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Breathing Run")),
+      appBar: AppBar(title: const Text("Bài tập hít thở")),
       body: Stack(
         children: [
           if(!_isCountingDown)...[
