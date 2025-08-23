@@ -57,14 +57,14 @@ class _CustomMappingDialogState extends State<CustomMappingDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Tùy chỉnh chuyển đổi"),
+      title: const Text("Mảng mã hóa:\n A - @\n a - &"),
       content: TextField(
         controller: _controller,
         minLines: 15,
         maxLines: 16,
         decoration: const InputDecoration(
           border: OutlineInputBorder(),
-          hintText: "Ví dụ:\nA - !!!\nB - ###",
+          hintText: "Ví dụ: A - !!!",
         ),
       ),
       actions: [

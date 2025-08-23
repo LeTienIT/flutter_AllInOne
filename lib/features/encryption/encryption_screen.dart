@@ -45,7 +45,7 @@ class _CryptoScreenState extends State<CryptoScreen> {
     "CUSTOM": {
       "id": "CUSTOM",
       "title": "Tự định nghĩa",
-      "encrypt": "Bạn tự định nghĩa ra 1 bảng mã hóa [Đơn giản chỉ là thay thế ký tự: VD: A -> !!!]",
+      "encrypt": "Bạn tự định nghĩa ra 1 bảng mã hóa [Đơn giản chỉ là thay thế ký tự: VD: A - !!!]",
       "decrypt": "Sẽ sử dụng chính bảng mã hóa do bạn định nghĩa",
       "usage": "Tùy ý chí của bạn.",
     },
