@@ -14,7 +14,7 @@ class BreathingRun extends StatefulWidget {
 
 class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderStateMixin {
   late BreathingPattern pattern;
-  late AnimationController _controller;
+  AnimationController? _controller;
   final ScrollController _scrollController = ScrollController();
 
   // Tốc độ
@@ -31,13 +31,8 @@ class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderSt
   bool _isCountingDown = true; // đang đếm ngược
   Timer? _countdownTimer;
 
-  int _cyclesCompleted = 0;
-  bool stop = false;
-
-  bool _isDelay = false; // đang delay trước khi animation “hiển thị”
-  int _delaySeconds = 5;
-
   String _currentPhaseText = "";
+  bool infinite = false;
   @override
   void initState() {
     super.initState();
@@ -71,35 +66,23 @@ class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderSt
     // Dùng Stopwatch để X không reset sau mỗi cycle
     // _sw.start();
 
-    _controller.addListener(() {
-      final elapsed = _controller.lastElapsedDuration ?? Duration.zero;
+    _controller!.addListener(() {
+      final elapsed = _controller!.lastElapsedDuration ?? Duration.zero;
       final secondsInCycle = elapsed.inMicroseconds / 1e6;
       final cycles = (elapsed.inSeconds ~/ total); // số cycle đã xong
 
       final totalSeconds = cycles * total + secondsInCycle; // tổng thời gian
       _tick(totalSeconds);
 
-      // if (secondsInCycle >= total){
-      //   _cyclesCompleted++;
-      //   _isDelay = true;
-      //   _currentPhaseText = "Bắt đầu lại sau 5s";
-      //   if(_cyclesCompleted >= 5){
-      //     Future.delayed(Duration(seconds: _delaySeconds), () {
-      //       if (mounted) {
-      //         setState(() {
-      //           _isDelay = false;
-      //         });
-      //       }
-      //     });
-      //   }
-      //
-      // }
+      final remainingSeconds = 5 * total - totalSeconds; // 5 chu trình
+      if (remainingSeconds <= 0 && !infinite) {
+        _controller!.stop();
+      }
     });
 
     // _controller.repeat();
   }
   void _tick(double totalSeconds) {
-    if (_isDelay) return;
 
     final screenSize = MediaQuery.of(context).size;
     final baseY = screenSize.height / 2;
@@ -175,8 +158,7 @@ class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    // _controller.removeListener(_tick);
-    _controller.dispose();
+    _controller!.dispose();
     _scrollController.dispose();
     _sw.stop();
     super.dispose();
@@ -237,7 +219,34 @@ class _BreathingRunState extends State<BreathingRun> with SingleTickerProviderSt
                   color: Colors.blue,
                 ),
               ),
-            )
+            ),
+
+          if(_controller != null && !_controller!.isAnimating)...[
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: ElevatedButton(
+                  onPressed: (){
+                    _points.clear();
+                    infinite = true;
+                    _controller!.repeat();
+                  },
+                  child: Text('Vô hạn')
+              ),
+            ),
+
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: ElevatedButton(
+                  onPressed: (){
+                    _points.clear();
+                    _controller!.repeat();
+                  },
+                  child: Text('Lặp lại')
+              ),
+            ),
+          ]
         ],
       )
     );
