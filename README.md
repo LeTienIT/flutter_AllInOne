@@ -7,8 +7,8 @@ Bạn sẽ tìm thấy rất nhiều thứ thú vị ở đây. Thử khám phá
 
 ## Trạng thái
 
-- Hoàn thiện: **90%**
-- Đã triển khai: **10 chức năng**
+- Hoàn thiện: **100%**
+- Đã triển khai: **12 chức năng**
 
 ## Gợi ý phát triển
 

@@ -6,6 +6,7 @@ import 'package:all_in_one_tool/features/calendar/calendar_more_screen.dart';
 import 'package:all_in_one_tool/features/calendar/calendar_screen.dart';
 import 'package:all_in_one_tool/features/encryption/encryption_screen.dart';
 import 'package:all_in_one_tool/features/image/image_screen.dart';
+import 'package:all_in_one_tool/features/qr_scanner/QrScannerScreen.dart';
 import 'package:all_in_one_tool/features/random/coin_animation.dart';
 import 'package:all_in_one_tool/features/time/time_screen.dart';
 import 'package:all_in_one_tool/features/unit/unit_screen.dart';
@@ -74,6 +75,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => BreathingRun(mode: arg,));
       case '/encryption':
         return MaterialPageRoute(builder: (_) => CryptoScreen());
+      case '/qr':
+        return MaterialPageRoute(builder: (_) => QrScannerScreen());
 
       default:
         return MaterialPageRoute(
