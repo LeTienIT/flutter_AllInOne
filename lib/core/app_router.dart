@@ -18,6 +18,7 @@ import '../features/currency/currency_screen.dart';
 import '../features/password/pass_word_screen.dart';
 import '../features/random/random_screen.dart';
 import '../features/random/wheel_animation.dart';
+import '../features/setting/setting_screen.dart';
 
 class AppRouter{
   static const String home = '/';
@@ -77,7 +78,8 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => CryptoScreen());
       case '/qrScanner':
         return MaterialPageRoute(builder: (_) => QrScannerScreen());
-
+      case '/sort':
+        return MaterialPageRoute(builder: (_) => FeatureReorderPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
