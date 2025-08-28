@@ -4,12 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../widget/feature_button.dart';
+import '../widget/welcomePopup.dart';
 
-class HomeScreen extends ConsumerWidget{
+class HomeScreen extends ConsumerStatefulWidget{
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _HomeScreen();
+  }
+
+}
+
+class _HomeScreen extends ConsumerState<HomeScreen>{
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WelcomePopup.showIfFirstTime(context);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final features = ref.watch(featureListProvider);
 
     return Scaffold(
