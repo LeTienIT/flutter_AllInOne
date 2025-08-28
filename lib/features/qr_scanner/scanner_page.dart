@@ -28,11 +28,20 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   void _searchOnline(String value) async {
-    final url = Uri.parse("https://www.google.com/search?q=$value");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+    final Uri url = Uri.parse(
+      "https://www.google.com/search?q=${Uri.encodeComponent(value)}",
+    );
+
+    final bool launched = await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched) {
+      debugPrint("Không mở được URL: $url");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -75,14 +75,14 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => BreathingRun(mode: arg,));
       case '/encryption':
         return MaterialPageRoute(builder: (_) => CryptoScreen());
-      case '/qr':
+      case '/qrScanner':
         return MaterialPageRoute(builder: (_) => QrScannerScreen());
 
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
             appBar: AppBar(title: Text('Lỗi',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),centerTitle: true,),
-            body: Center(child: Text('Không tìm thấy trang')),
+            body: Center(child: Text('Không tìm thấy trang ${setting.name}')),
           ),
         );
     }

@@ -107,7 +107,7 @@ final featureListProvider = StateProvider<List<AppFeature>>((ref) {
       type: AppFeatureType.qrScanner,
       title: 'Quét mã QR',
       iconPath: 'assets/qrScanner.png',
-      route: '/qr',
+      route: '/qrScanner',
       order: 12,
       color: Colors.purple,
       descr: 'Quét QR, Mã vạch ...',
